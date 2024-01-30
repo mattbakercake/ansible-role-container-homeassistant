@@ -20,11 +20,11 @@
   community.docker.docker_container_exec:
     container: homeassistant
     command: /bin/bash -c "wget -O - https://get.hacs.xyz | bash -"
-  register: result
+  register: hacs_install
   when: not hacs_dir.stat.exists
 
 - name: Restart homeassistant
   become: true
   ansible.builtin.command: "docker compose -f {{ docker_compose_dir }}/compose.homeassistant.yaml restart"
-  when: result is defined
+  when: not hac_install.skipped
 
