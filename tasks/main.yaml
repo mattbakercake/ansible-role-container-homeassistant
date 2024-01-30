@@ -1,0 +1,21 @@
+- name: Copy the compose file
+  become: true
+  template:
+    src: templates/compose.yaml
+    dest: "{{ docker_compose_dir }}/compose.homeassistant.yaml"
+
+- name: Docker-compose up
+  become: true
+  ansible.builtin.command: "docker compose -f {{ docker_compose_dir }}/compose.homeassistant.yaml up --detach"
+
+- name: Install HACS in the container
+  become: true
+  community.docker.docker_container_exec:
+    container: homeassistant
+    command: /bin/bash -c "wget -O - https://get.hacs.xyz | bash -"
+  register: result
+
+- name: Restart homeassistant
+  become: true
+  ansible.builtin.command: "docker compose -f {{ docker_compose_dir }}/compose.homeassistant.yaml restart"
+

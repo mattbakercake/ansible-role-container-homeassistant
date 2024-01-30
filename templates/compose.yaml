@@ -1,0 +1,11 @@
+services:
+  homeassistant:
+    container_name: homeassistant
+    image: homeassistant/home-assistant:stable
+    ports:
+      - "8123:8123"
+    volumes:
+      - "{{ docker_dir }}/homeassistant/config:/config"
+    environment:
+      - TZ={{ timezone }}
+    restart: always
