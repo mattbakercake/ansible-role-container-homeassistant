@@ -26,5 +26,5 @@
 - name: Restart homeassistant
   become: true
   ansible.builtin.command: "docker compose -f {{ docker_compose_dir }}/compose.homeassistant.yaml restart"
-  when: not hac_install.skipped
+  when: hac_install is defined
 
