@@ -3,10 +3,12 @@
   template:
     src: templates/compose.yaml
     dest: "{{ docker_compose_dir }}/compose.homeassistant.yaml"
+  register: compose_file
 
 - name: Docker-compose up
   become: true
   ansible.builtin.command: "docker compose -f {{ docker_compose_dir }}/compose.homeassistant.yaml up --detach"
+  when: compose_file.changed
 
 - name: Install HACS in the container
   become: true
