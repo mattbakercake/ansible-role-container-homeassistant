@@ -3,12 +3,7 @@
   template:
     src: templates/compose.yaml
     dest: "{{ docker_compose_dir }}/compose.homeassistant.yaml"
-  register: compose_file
-
-- name: Docker-compose up
-  become: true
   notify: start homeassistant
-  when: compose_file.changed
 
 - name: Flush handlers #force preceeding handler to run immediately
   meta: flush_handlers
@@ -23,14 +18,9 @@
   community.docker.docker_container_exec:
     container: homeassistant
     command: /bin/bash -c "wget -O - https://get.hacs.xyz | bash -"
-  register: hacs_install
   when: not hacs_dir.stat.exists
-
-- name: Restart homeassistant
-  become: true
-  notify: start homeassistant
-  when: hac_install is defined
-
+  notify: restart homeassistant
+  
 - name: Flush handlers #force preceeding handler to run immediately
   meta: flush_handlers
 
