@@ -7,8 +7,11 @@
 
 - name: Docker-compose up
   become: true
-  ansible.builtin.command: "docker compose -f {{ docker_compose_dir }}/compose.homeassistant.yaml up --detach"
+  notify: start homeassistant
   when: compose_file.changed
+
+- name: Flush handlers #force preceeding handler to run immediately
+  meta: flush_handlers
 
 - name: Check whether HACS component exists
   stat:
@@ -25,6 +28,10 @@
 
 - name: Restart homeassistant
   become: true
-  ansible.builtin.command: "docker compose -f {{ docker_compose_dir }}/compose.homeassistant.yaml restart"
+  notify: start homeassistant
   when: hac_install is defined
+
+- name: Flush handlers #force preceeding handler to run immediately
+  meta: flush_handlers
+
 
