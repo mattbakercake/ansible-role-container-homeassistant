@@ -17,6 +17,7 @@
   become: true
   community.docker.docker_container_exec:
     container: homeassistant
+    chdir: /config
     command: /bin/bash -c "wget -O - https://get.hacs.xyz | bash -"
   when: not hacs_dir.stat.exists
   notify: restart homeassistant
