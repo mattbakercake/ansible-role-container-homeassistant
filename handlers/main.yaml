@@ -1,6 +1,7 @@
 - name: start homeassistant
   become: true
   community.docker.docker_compose_v2:
+    project_name: "homeassistant"
     project_src: "{{ docker_compose_dir }}"
     files:
     - compose.homeassistant.yaml
@@ -8,6 +9,7 @@
 - name: restart homeassistant
   become: true
   community.docker.docker_compose_v2:
+    project_name: "homeassistant"
     project_src: "{{ docker_compose_dir }}"
     files:
     - compose.homeassistant.yaml
